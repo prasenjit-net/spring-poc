@@ -1,1 +1,1 @@
-web: java -Xdebug -Dserver.port=$PORT -jar target/demo-0.0.1-SNAPSHOT.jar
+web: java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,suspend=n -Dserver.port=$PORT -jar target/demo-0.0.1-SNAPSHOT.jar
