@@ -3,6 +3,7 @@ package demo.controller;
 import lombok.extern.log4j.Log4j2;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,12 +21,16 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Value("${spring.datasource.platform}")
+	private String dbPlatform;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String index(Model model) {
 		log.entry(model);
 		model.addAttribute("customers", customerRepository.findAll());
 		model.addAttribute("editCustomer", new Customer());
+		model.addAttribute("dbplatform", dbPlatform);
 		return log.exit("customer");
 	}
 
@@ -51,6 +56,7 @@ public class CustomerController {
 			model.addAttribute("editCustomer", customer);	
 		}
 		model.addAttribute("customers", customerRepository.findAll());
+		model.addAttribute("dbplatform", dbPlatform);
 		return log.exit("customer");
 	}
 
