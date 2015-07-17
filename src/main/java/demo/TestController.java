@@ -9,7 +9,7 @@ public class TestController {
 
 	@RequestMapping("/")
 	public String index(Model model){
-		model.addAttribute("key", "value11");
+		model.addAttribute("key", "value12");
 		model.addAttribute("key1", "value23");
 		return "index";
 	}
