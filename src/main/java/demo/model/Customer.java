@@ -11,7 +11,7 @@ import lombok.Data;
 public class Customer {
 	@Id
 	@GeneratedValue
-	private String id;
+	private Integer id;
 	private String firstName;
 	private String lastName;
 }

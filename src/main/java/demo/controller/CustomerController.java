@@ -37,14 +37,14 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
-	public String delete(@PathVariable("id") String id, Model model) {
+	public String delete(@PathVariable("id") Integer id, Model model) {
 		log.entry(id, model);
 		customerRepository.delete(id);
 		return log.exit("redirect:/customer");
 	}
 
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-	public String edit(@PathVariable("id") String id, Model model) {
+	public String edit(@PathVariable("id") Integer id, Model model) {
 		log.entry(id, model);
 		Customer customer = customerRepository.findOne(id);
 		if (null != customer) {
