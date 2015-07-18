@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout/common :: head">
+<head th:include="layout/common :: head (Customer)">
 </head>
 <body>
 	<div class="container">
-		<div th:replace="layout/common :: navigation"></div>
+		<div th:replace="layout/common :: navigation (customer)"></div>
 		<h1>Customers Management</h1>
 		<div class="row">
 			<div class="col-xs-12 col-md-4">

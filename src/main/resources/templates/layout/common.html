@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head">
+<head th:fragment="head (title)">
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,10 +14,11 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"
 	th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap-theme.min.css}" />
 
-<title>Customer</title>
+<link rel="stylesheet" th:href="@{/css/site.css}" />
+<title th:text="${title}">Title</title>
 </head>
 <body>
-	<div th:fragment="navigation">
+	<div th:fragment="navigation (active)">
 		<nav class="navbar navbar-inverse">
 			<div class="container">
 				<div class="navbar-header">
@@ -32,10 +33,19 @@
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a th:href="@{/customer}">Customer</a></li>
+						<li th:class="${'home'.equals(active)?'active':''}"><a
+							th:href="@{/home}">Home</a></li>
+						<li th:class="${'customer'.equals(active)?'active':''}"><a
+							th:href="@{/customer}">Customer</a></li>
 						<li><a href="#about">About</a></li>
 						<li><a href="#contact">Contact</a></li>
 					</ul>
+					<form class="navbar-form navbar-right" action="#"
+						th:action="@{/logout}" method="post">
+						<div class="form-group">
+							<button type="submit" class="btn btn-link">Logout</button>
+						</div>
+					</form>
 				</div>
 				<!--/.nav-collapse -->
 			</div>
