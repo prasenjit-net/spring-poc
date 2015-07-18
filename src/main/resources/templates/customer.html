@@ -1,44 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="ISO-8859-1" />
-<title>Customer</title>
+<head th:include="layout/common :: head">
 </head>
 <body>
-	<h1>Customers Management</h1>
-	<fieldset>
-		<legend>All Customers</legend>
-		<table>
-			<tr>
-				<th>Id</th>
-				<th>First Name</th>
-				<th>Last Name</th>
-			</tr>
-			<tr th:each="customer : ${customers}">
-				<td th:text="${customer.id}">1</td>
-				<td th:text="${customer.firstName}">First Name</td>
-				<td th:text="${customer.lastName}">Last Name</td>
-				<td><a th:href="@{/customer/edit/{id}(id=${customer.id})}">Edit</a>
-					<form action="#"
-						th:action="@{/customer/delete/{id}(id=${customer.id})}"
-						method="post">
-						<input type="submit" value="Delete" />
-					</form></td>
-			</tr>
-		</table>
-	</fieldset>
-	<fieldset>
-		<legend>Create New Customer</legend>
-		<form action="#" th:action="@{/customer/save}"
-			th:object="${editCustomer}" method="post">
-			<input type="hidden" th:field="*{id}" /> <span>First Name</span> <input
-				type="text" th:field="*{firstName}" /> <span>Last Name</span> <input
-				type="text" th:field="*{lastName}" /> <input type="submit"
-				value="Submit" />
-		</form>
-	</fieldset>
-	<fieldset>
-		Database Plafrom <b th:text="${dbplatform}">Unknown</b>
-	</fieldset>
+	<div class="container">
+		<div th:replace="layout/common :: navigation"></div>
+		<h1>Customers Management</h1>
+		<div class="row">
+			<div class="col-xs-12 col-md-4">
+				<div class="panel panel-success">
+					<div class="panel-heading">Create New Customer</div>
+					<div class="panel-body">
+						<p>Create a new or edit an existing customer</p>
+						<form action="#" th:action="@{/customer/save}"
+							th:object="${editCustomer}" method="post" class="form-horizontal">
+							<input type="hidden" th:field="*{id}" />
+							<div class="form-group">
+								<input type="text" th:field="*{firstName}" class="form-control"
+									placeholder="First Name" />
+							</div>
+							<div class="form-group">
+								<input type="text" th:field="*{lastName}" class="form-control"
+									placeholder="Last Name" />
+							</div>
+							<div class="form-group">
+								<input type="submit" value="Submit" class="btn btn-primary" />
+							</div>
+						</form>
+						<span>Database Plafrom <b th:text="${dbplatform}">Unknown</b></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-8">
+				<div class="panel panel-success">
+					<div class="panel-heading">All Customers</div>
+					<div class="panel-body">
+						<p>Displays all the customers available in system</p>
+					</div>
+					<table class="table table-hover">
+						<tr>
+							<th>Id</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th></th>
+						</tr>
+						<tr th:each="customer : ${customers}">
+							<td th:text="${customer.id}">1</td>
+							<td th:text="${customer.firstName}">First Name</td>
+							<td th:text="${customer.lastName}">Last Name</td>
+							<td>
+								<form action="#"
+									th:action="@{/customer/delete/{id}(id=${customer.id})}"
+									method="post">
+									<div class="btn-group btn-group-xs" role="group">
+										<a th:href="@{/customer/edit/{id}(id=${customer.id})}"
+											class="btn btn-primary">Edit</a> <input type="submit"
+											value="Delete" class="btn btn-danger" />
+									</div>
+								</form>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="layout/common :: script"></div>
 </body>
 </html>
