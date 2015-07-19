@@ -5,6 +5,9 @@
 <body>
 	<div class="container">
 		<div th:replace="layout/common :: navigation (home)"></div>
+		<h1>Customer Management</h1>
 	</div>
+	<div th:include="layout/common :: script"></div>
+	<script type="text/javascript" th:src="@{/js/customer.js}"></script>
 </body>
 </html>
