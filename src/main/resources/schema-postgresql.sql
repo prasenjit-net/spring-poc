@@ -11,6 +11,19 @@ WITH (
   OIDS=FALSE
 );
 
+DROP TABLE IF EXISTS fuser;
+
+CREATE TABLE fuser
+(
+  email character varying(255) NOT NULL,
+  first_name character varying(255),
+  last_name character varying(255),
+  CONSTRAINT fuser_pkey PRIMARY KEY (email)
+)
+WITH (
+  OIDS=FALSE
+);
+
 DROP SEQUENCE IF EXISTS hibernate_sequence;
 
 CREATE SEQUENCE hibernate_sequence

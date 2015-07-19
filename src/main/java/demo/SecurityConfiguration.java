@@ -1,49 +1,49 @@
 package demo;
 
-import java.util.Collections;
-
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUserDetailsService;
+import org.springframework.social.security.SpringSocialConfigurer;
+
+import demo.model.AuthenticatedUser;
+import demo.model.User;
+import demo.repo.UserRepository;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth)
-			throws Exception {
-		auth.userDetailsService(
-				uname -> new User(uname, passwordEncoder.encode(uname),
-						Collections.emptyList())).passwordEncoder(
-				passwordEncoder);
-	}
-
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("css/**", "/webjars/**", "js/**");
+		web.ignoring().antMatchers("css/**", "/webjars/**", "js/**", "/img/**");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.formLogin().loginPage("/login").permitAll()
-				.loginProcessingUrl("/login").permitAll()
-				.usernameParameter("username").passwordParameter("password")
-				.and().sessionManagement()
+		http.formLogin().loginPage("/auth/facebook").permitAll().and()
+				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 				.sessionFixation().changeSessionId().and().logout()
 				.logoutSuccessUrl("/logout").permitAll()
-				.logoutSuccessUrl("/home").and().authorizeRequests()
-				.anyRequest().fullyAuthenticated();
+				.logoutSuccessUrl("/home").invalidateHttpSession(true).and()
+				.authorizeRequests().antMatchers("/signup", "/", "/home")
+				.anonymous().anyRequest().fullyAuthenticated().and().csrf()
+				.disable().apply(new SpringSocialConfigurer())
+				.postLoginUrl("/home");
 	}
+
+	@Bean
+	public SocialUserDetailsService socialUser(UserRepository userRepository) {
+		return userId -> {
+			User user = userRepository.findOne(userId);
+			return new AuthenticatedUser(user.getEmail(), user.getFirstName());
+		};
+	}
+
 }

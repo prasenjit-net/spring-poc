@@ -29,14 +29,19 @@ $(document).ready(function() {
 			event.preventDefault();
 			var href = $(this).attr("href");
 			$(target).load(href);
+		} else {
+			var targetForm = $(this).attr("data-demo-form");
+			if (targetForm) {
+				$(targetForm).submit();
+			}
 		}
 	});
-	
+
 	$(document).on("click", "button.ajax", function(event) {
 		var targetForm = $(this).attr("data-demo-form");
 		if (targetForm) {
-			var event = jQuery.Event( "submit" );
-			$(targetForm).submit();//trigger(event);
+			var event = jQuery.Event("submit");
+			$(targetForm).submit();// trigger(event);
 		}
 	});
 
