@@ -5,7 +5,7 @@
 <body>
 	<div class="container">
 		<div th:replace="layout/common :: navigation (customer)"></div>
-		<h1>Customers Management</h1>
+		<h1>Customer Management</h1>
 		<div class="row">
 			<div class="col-xs-12 col-md-4">
 				<div class="panel panel-success">
@@ -13,7 +13,9 @@
 					<div class="panel-body">
 						<p>Create a new or edit an existing customer</p>
 						<form action="#" th:action="@{/customer/save}"
-							th:object="${editCustomer}" method="post" class="form-horizontal">
+							th:fragment="customer-edit" th:object="${editCustomer}"
+							method="post" class="form-horizontal" id="customer-edit"
+							data-demo-target="#all-customer-table">
 							<input type="hidden" th:field="*{id}" />
 							<div class="form-group">
 								<input type="text" th:field="*{firstName}" class="form-control"
@@ -24,7 +26,10 @@
 									placeholder="Last Name" />
 							</div>
 							<div class="form-group">
-								<input type="submit" value="Submit" class="btn btn-primary" />
+								<div class="btn-group btn-group-md" role="group">
+									<a class="ajax btn btn-success" th:href="@{/customer/new}" data-demo-target="#customer-edit">New</a>
+									<input type="submit" value="Submit" class="btn btn-primary" />
+								</div>
 							</div>
 						</form>
 						<span>Database Plafrom <b th:text="${dbplatform}">Unknown</b></span>
@@ -37,7 +42,8 @@
 					<div class="panel-body">
 						<p>Displays all the customers available in system</p>
 					</div>
-					<table class="table table-hover">
+					<table th:fragment="all-customer-table" class="table table-hover"
+						id="all-customer-table">
 						<tr>
 							<th>Id</th>
 							<th>First Name</th>
@@ -49,15 +55,22 @@
 							<td th:text="${customer.firstName}">First Name</td>
 							<td th:text="${customer.lastName}">Last Name</td>
 							<td>
-								<form action="#"
+								<form action="#" th:id="'delete-form-' + ${customer.id}"
 									th:action="@{/customer/delete/{id}(id=${customer.id})}"
-									method="post">
-									<div class="btn-group btn-group-xs" role="group">
-										<a th:href="@{/customer/edit/{id}(id=${customer.id})}"
-											class="btn btn-primary">Edit</a> <input type="submit"
-											value="Delete" class="btn btn-danger" />
-									</div>
-								</form>
+									method="post" data-demo-target="#all-customer-table"></form>
+								<form action="#" th:id="'edit-form-' + ${customer.id}"
+									th:action="@{/customer/edit/{id}(id=${customer.id})}"
+									method="get" data-demo-target="#customer-edit"></form>
+								<div class="btn-group btn-group-md" role="group">
+									<button value="Edit" class="ajax btn btn-primary"
+										th:attr="data-demo-form='#edit-form-' + ${customer.id}">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</button>
+									<button value="Delete" class="ajax btn btn-danger"
+										th:attr="data-demo-form='#delete-form-' + ${customer.id}">
+										<span class="glyphicon glyphicon-trash"></span>
+									</button>
+								</div>
 							</td>
 						</tr>
 					</table>
@@ -66,5 +79,6 @@
 		</div>
 	</div>
 	<div th:include="layout/common :: script"></div>
+	<script type="text/javascript" th:src="@{/js/customer.js}"></script>
 </body>
 </html>

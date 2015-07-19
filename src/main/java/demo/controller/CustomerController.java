@@ -21,7 +21,7 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerRepository customerRepository;
-	
+
 	@Value("${spring.datasource.platform}")
 	private String dbPlatform;
 
@@ -38,14 +38,16 @@ public class CustomerController {
 	public String save(@ModelAttribute Customer customer, Model model) {
 		log.entry(customer, model);
 		customer = customerRepository.save(customer);
-		return log.exit("redirect:/customer");
+		index(model);
+		return log.exit("customer :: all-customer-table");
 	}
-	
+
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
 	public String delete(@PathVariable("id") Integer id, Model model) {
 		log.entry(id, model);
 		customerRepository.delete(id);
-		return log.exit("redirect:/customer");
+		index(model);
+		return log.exit("customer :: all-customer-table");
 	}
 
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
@@ -53,11 +55,18 @@ public class CustomerController {
 		log.entry(id, model);
 		Customer customer = customerRepository.findOne(id);
 		if (null != customer) {
-			model.addAttribute("editCustomer", customer);	
+			model.addAttribute("editCustomer", customer);
 		}
-		model.addAttribute("customers", customerRepository.findAll());
 		model.addAttribute("dbplatform", dbPlatform);
-		return log.exit("customer");
+		return log.exit("customer :: customer-edit");
+	}
+
+	@RequestMapping(value = "new", method = RequestMethod.GET)
+	public String newCustomer(Model model) {
+		log.entry(model);
+		model.addAttribute("editCustomer", new Customer());
+		model.addAttribute("dbplatform", dbPlatform);
+		return log.exit("customer :: customer-edit");
 	}
 
 }
