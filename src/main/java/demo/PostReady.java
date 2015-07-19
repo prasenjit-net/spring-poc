@@ -1,5 +1,7 @@
 package demo;
 
+import lombok.extern.log4j.Log4j2;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.social.connect.UserProfile;
@@ -10,22 +12,26 @@ import demo.model.User;
 import demo.repo.UserRepository;
 
 @Component
+@Log4j2
 public class PostReady implements CommandLineRunner {
 
-	@Autowired
+	@Autowired(required = false)
 	private InMemoryUsersConnectionRepository repo;
-
 	@Autowired
 	private UserRepository userRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
-		repo.setConnectionSignUp(connection -> {
-			UserProfile profile = connection.fetchUserProfile();
-			User user = new User(profile.getEmail(), profile.getFirstName(),
-					profile.getLastName());
-			userRepository.save(user);
-			return profile.getEmail();
-		});
+		try {
+			repo.setConnectionSignUp(connection -> {
+				UserProfile profile = connection.fetchUserProfile();
+				User user = new User(profile.getEmail(),
+						profile.getFirstName(), profile.getLastName());
+				userRepository.save(user);
+				return profile.getEmail();
+			});
+		} catch (NullPointerException e) {
+			log.error("Failed to aquire UserConnectionRepository");
+		}
 	}
 }

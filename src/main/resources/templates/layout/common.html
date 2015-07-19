@@ -43,7 +43,8 @@
 						<li><a href="#contact">Contact</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right" sec:authorize="anonymous">
-						<li><a th:href="@{/auth/facebook}">Login</a></li>
+						<li><a th:href="@{/auth/facebook}"><span
+								class="glyphicon glyphicon-thumbs-up"></span> Login</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right"
 						sec:authorize="authenticated">

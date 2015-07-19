@@ -15,7 +15,7 @@ import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 public class DemoApplication {
-	
+
 	@Autowired
 	private Environment env;
 
@@ -37,4 +37,5 @@ public class DemoApplication {
 				.driverClassName("org.postgresql.Driver").username(username)
 				.password(password).url(dbUrl).build();
 	}
+
 }
