@@ -21,7 +21,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("css/**", "/webjars/**", "js/**", "/img/**");
+		web.ignoring().antMatchers("css/**", "/webjars/**", "js/**", "/img/**")
+				.and();
 	}
 
 	@Override
@@ -35,7 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().antMatchers("/signup", "/", "/home")
 				.anonymous().anyRequest().fullyAuthenticated().and().csrf()
 				.disable().apply(new SpringSocialConfigurer())
-				.postLoginUrl("/home");
+				.postLoginUrl("/home").and().requiresChannel().anyRequest()
+				.requiresSecure();
 	}
 
 	@Bean
