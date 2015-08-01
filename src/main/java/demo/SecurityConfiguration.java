@@ -36,8 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().antMatchers("/signup", "/", "/home")
 				.anonymous().anyRequest().fullyAuthenticated().and().csrf()
 				.disable().apply(new SpringSocialConfigurer())
-				.postLoginUrl("/home").and().requiresChannel().anyRequest()
-				.requiresSecure();
+				.postLoginUrl("/home");
 	}
 
 	@Bean
