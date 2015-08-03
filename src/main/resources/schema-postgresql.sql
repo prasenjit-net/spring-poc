@@ -18,6 +18,7 @@ CREATE TABLE fuser
   email character varying(255) NOT NULL,
   first_name character varying(255),
   last_name character varying(255),
+  admin CHARACTER VARYING(10),
   CONSTRAINT fuser_pkey PRIMARY KEY (email)
 )
 WITH (
