@@ -18,33 +18,33 @@ import org.springframework.social.security.SpringSocialConfigurer;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("css/**", "/webjars/**", "js/**", "/img/**")
-				.and();
-	}
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("css/**", "/webjars/**", "js/**", "/img/**")
+                .and();
+    }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.formLogin().loginPage("/auth/facebook").permitAll().and()
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-				.sessionFixation().changeSessionId().and().logout()
-				.logoutSuccessUrl("/logout").permitAll()
-				.logoutSuccessUrl("/home").invalidateHttpSession(true).and()
-				.authorizeRequests().antMatchers("/signup", "/", "/home")
-				.anonymous().anyRequest().fullyAuthenticated().and().csrf()
-				.disable().apply(new SpringSocialConfigurer())
-				.postLoginUrl("/home");
-	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin().loginPage("/auth/facebook").permitAll().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionFixation().changeSessionId().and().logout()
+                .logoutSuccessUrl("/logout").permitAll()
+                .logoutSuccessUrl("/home").invalidateHttpSession(true).and()
+                .authorizeRequests().antMatchers("/signup", "/", "/home")
+                .anonymous().anyRequest().fullyAuthenticated().and().csrf()
+                .disable().apply(new SpringSocialConfigurer())
+                .postLoginUrl("/home").and().requiresChannel().anyRequest().requiresSecure();
+    }
 
-	@Bean
-	public SocialUserDetailsService socialUser(UserRepository userRepository) {
-		return userId -> {
-			User user = userRepository.findOne(userId);
+    @Bean
+    public SocialUserDetailsService socialUser(UserRepository userRepository) {
+        return userId -> {
+            User user = userRepository.findOne(userId);
             AuthenticatedUser authenticatedUser = new AuthenticatedUser(user.getEmail(), user.getFirstName(), user.isAdmin());
             return authenticatedUser;
         };
-	}
+    }
 
 }
