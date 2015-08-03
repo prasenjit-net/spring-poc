@@ -1,7 +1,6 @@
 package demo.model;
 
-import java.util.Collections;
-
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.social.security.SocialUser;
 
 public class AuthenticatedUser extends SocialUser {
@@ -9,8 +8,8 @@ public class AuthenticatedUser extends SocialUser {
 
 	private String fullName;
 
-	public AuthenticatedUser(String username, String fullName) {
-		super(username, username, Collections.emptyList());
+	public AuthenticatedUser(String username, String fullName, boolean admin) {
+		super(username, username, AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
 		this.fullName = fullName;
 	}
 

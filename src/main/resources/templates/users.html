@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout/common :: head (Users)">
+</head>
+<body>
+<div class="container">
+    <div th:replace="layout/common :: navigation (users)"></div>
+    <h1>Customer Management</h1>
+
+    <div class="panel panel-success">
+        <div class="panel-heading">View All Registered Users</div>
+        <div class="panel-body">
+            <p>Displays all the user currently registered in the system</p>
+        </div>
+        <table th:fragment="all-customer-table" class="table table-hover"
+               id="all-customer-table">
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th></th>
+            </tr>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.email}">1</td>
+                <td th:text="${user.firstName}">First Name</td>
+                <td th:text="${user.lastName}">Last Name</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div th:include="layout/common :: script"></div>
+<script type="text/javascript" th:src="@{/js/customer.js}"></script>
+</body>
+</html>

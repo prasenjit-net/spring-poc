@@ -1,5 +1,8 @@
 package demo;
 
+import demo.model.AuthenticatedUser;
+import demo.model.User;
+import demo.repo.UserRepository;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,10 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
-
-import demo.model.AuthenticatedUser;
-import demo.model.User;
-import demo.repo.UserRepository;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
@@ -43,8 +42,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public SocialUserDetailsService socialUser(UserRepository userRepository) {
 		return userId -> {
 			User user = userRepository.findOne(userId);
-			return new AuthenticatedUser(user.getEmail(), user.getFirstName());
-		};
+            AuthenticatedUser authenticatedUser = new AuthenticatedUser(user.getEmail(), user.getFirstName(), user.isAdmin());
+            return authenticatedUser;
+        };
 	}
 
 }
